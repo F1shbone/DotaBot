@@ -1,0 +1,61 @@
+{
+  "lvlup": {
+    "file": "files/sounds/551.mp3",
+    "category": "sounds",
+    "keywords": [ "sounds", "mario", "lvlup" ]
+  },
+
+  "arschoffen": {
+    "file": "files/bayrisch/007.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "arsch" ]
+  },
+  "deppert": {
+    "file": "files/bayrisch/012.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "deppert" ]
+  },
+  "gruenwald1": {
+    "file": "files/bayrisch/361.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "grünwald" ]
+  },
+  "gruenwald2": {
+    "file": "files/bayrisch/393.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "grünwald" ]
+  },
+  "stoiber1": {
+    "file": "files/bayrisch/179.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "stoiber" ]
+  },
+  "schlau_daherredn": {
+    "file": "files/bayrisch/360.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "schlau daherredn" ]
+  },
+  "sehr_guad": {
+    "file": "files/bayrisch/365.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "sehr guad" ]
+  },
+
+  "stuhl": {
+    "file": "files/Spencer&Hill/268.mp3",
+    "category": "bayrisch",
+    "keywords": [ "bayrisch", "Mit dem Stuhl in die Schnauze" ]
+  },
+
+  "ossi1": {
+    "file": "files/Ossi/113.mp3",
+    "category": "ossi",
+    "keywords": [ "ossi", "Besinnung" ]
+  },
+
+  "1": {
+    "file": "files/Sprüche/033.mp3",
+    "category": "misc",
+    "keywords": [ "misc"]
+  }
+}

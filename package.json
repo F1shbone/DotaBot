@@ -1,0 +1,22 @@
+{
+  "name": "dotabot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "tiedemann",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "discord.js": "^11.1.0",
+    "discord.js-commando": "^0.9.0",
+    "node-opus": "^0.2.6",
+    "sqlite3": "^3.1.8"
+  }
+}
