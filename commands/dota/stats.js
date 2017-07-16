@@ -1,6 +1,6 @@
 /*
- * 
- * 
+ *
+ *
  */
 
 const Commando = require('discord.js-commando')
@@ -33,16 +33,15 @@ class StatsCommand extends Commando.Command {
         let winrate = winlose.data.win * 100 / (winlose.data.win + winlose.data.lose)
         let msg = `MMR for player: **${stats.data.profile.personaname}**`
 
-        msg += '\`\`\`'
+        msg += '```'
         msg += `\nSolo MMR:     ${mmr.solo || 'uncalibrated'}`
         msg += `\nParty MMR:    ${mmr.party || 'uncalibrated'}`
         msg += `\nEstimate MMR: ${mmr.estimate}`
         msg += `\nWinrate:      ${Math.round(winrate * 100) / 100}%`
-        msg += '\`\`\`'
-        
+        msg += '```'
+
         message.channel.send(msg)
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e)
       }
     } else {

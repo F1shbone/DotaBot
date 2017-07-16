@@ -47,7 +47,7 @@ jspm_packages
 .yarn-integrity
 
 # Sound Files
-/commands/sounds/files/*
+/commands/fun/files/*
 
 .key
 .smb-address

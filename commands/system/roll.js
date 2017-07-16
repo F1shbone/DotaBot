@@ -1,12 +1,12 @@
 /*
- * 
- * 
+ *
+ *
  */
 
 const Commando = require('discord.js-commando')
 
 class RollCommand extends Commando.Command {
-    constructor (client) {
+  constructor (client) {
     super(client, {
       name: 'roll',
       memberName: 'roll',
