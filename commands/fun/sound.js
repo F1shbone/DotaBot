@@ -67,7 +67,7 @@ class SoundCommand extends Commando.Command {
         let output = 'Available ' + (category ? 'Sounds' : 'Categories') + ':```'
         for (let i = 0; i < rows.length; i++) {
           if (category) {
-            output += '\n- ' + rows[i].name + ' (' + rows[i].id + ') - ' + rows[i].duration
+            output += '\n- (' + rows[i].id + ') ' + rows[i].name
           } else {
             output += '\n- ' + rows[i].name
           }
