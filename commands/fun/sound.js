@@ -18,7 +18,7 @@ class SoundCommand extends Commando.Command {
       examples: [ 'sound [name]' ]
     })
 
-    this.DB = new SQLite3.Database(path.join(__dirname, 'sounds.sqlite'))
+    this.DB = new SQLite3.Database(path.join(__dirname, 'db.sqlite'))
     this.connection = null
     this.dispatcher = null
   }
@@ -51,7 +51,15 @@ class SoundCommand extends Commando.Command {
     if (category === undefined) {
       sql = 'SELECT * FROM Category'
     } else {
-      sql = 'SELECT S.* FROM Sound As S, Category As C WHERE S.Category_Id == C.Id AND C.Name == \'' + category + '\''
+      sql = `
+        SELECT f.*
+        FROM
+          Files as f,
+          Category as c
+        WHERE
+          f.category_id == c.id
+          AND c.name == '${category}'
+      `
     }
 
     this.DB.all(sql, async (err, rows) => {
@@ -59,9 +67,9 @@ class SoundCommand extends Commando.Command {
         let output = 'Available ' + (category ? 'Sounds' : 'Categories') + ':```'
         for (let i = 0; i < rows.length; i++) {
           if (category) {
-            output += '\n- ' + rows[i].Key + ' (' + rows[i].Id + ')'
+            output += '\n- ' + rows[i].name + ' (' + rows[i].id + ') - ' + rows[i].duration
           } else {
-            output += '\n- ' + rows[i].Name
+            output += '\n- ' + rows[i].name
           }
         }
         output += '```'
@@ -85,16 +93,18 @@ class SoundCommand extends Commando.Command {
 
     let sql
     if (category === undefined) {
-      sql = 'SELECT S.*, C.Name FROM Sound As S, Category As C WHERE S.Category_Id == C.Id ORDER BY RANDOM() LIMIT 1'
+      sql = 'SELECT F.*, C.name as category_name FROM Files As F, Category As C WHERE F.category_id == C.id ORDER BY RANDOM() LIMIT 1'
     } else {
-      sql = 'SELECT S.*, C.Name FROM Sound As S, Category As C WHERE S.Category_Id == C.Id AND C.Name == \'' + category + '\' ORDER BY RANDOM() LIMIT 1'
+      sql = 'SELECT F.*, C.name as category_name FROM Files As F, Category As C WHERE F.category_id == C.id AND C.name == \'' + category + '\' ORDER BY RANDOM() LIMIT 1'
     }
 
     let self = this
     this.DB.all(sql, async (err, rows) => {
       if (!err) {
-        await message.channel.send(`Playing sound '${rows[0].Key} (${rows[0].Id})' from Category '${rows[0].Name}'`)
-        await self.playSound(message, rows[0].Id)
+        await message.channel.send(`Playing sound '${rows[0].name} (${rows[0].id})' from Category '${rows[0].category_name}'`)
+        await self.playSound(message, rows[0].id)
+      } else {
+        console.error(err)
       }
     })
   }
@@ -125,15 +135,15 @@ class SoundCommand extends Commando.Command {
 
     let self = this
     self.DB.all(`
-      SELECT S.*, C.Name As Category_Name
+      SELECT F.*, C.Name As category_name
       FROM
-        Sound As S,
+        Files As F,
         Category As C
       WHERE
-        S.Category_Id == C.Id AND
+        F.category_id == C.id AND
         (
-          S.Key == '${args}' OR
-          S.ID == '${args}'
+          F.name == '${args}' OR
+          F.id == '${args}'
         )
     `, async (err, rows) => {
       if (err || rows.length === 0) {
@@ -143,7 +153,7 @@ class SoundCommand extends Commando.Command {
 
       try {
         let sound = rows[0]
-        let file = path.join(__dirname, 'files', sound.Category_Name, sound.Filename)
+        let file = path.join(__dirname, 'files', sound.category_name, sound.name + '.mp3')
 
         let voiceChannel = message.member.voiceChannel
         let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
