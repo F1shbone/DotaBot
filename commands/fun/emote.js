@@ -39,12 +39,7 @@ class EmoteCommand extends Commando.Command {
    * @param {string} category (optional)
    */
   async listItems (message) {
-    this.DB.all(`
-      SELECT replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(name, 1, ''), 2, ''), 3, ''), 4, ''), 5, ''), 6, ''), 7, ''), 8, ''), 9, ''), 0, '') as name
-      FROM Files
-      WHERE category_id == 3
-      GROUP BY replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(name, 1, ''), 2, ''), 3, ''), 4, ''), 5, ''), 6, ''), 7, ''), 8, ''), 9, ''), 0, '')
-    `, async (err, rows) => {
+    this.DB.all(`SELECT name FROM SecondaryCategory`, async (err, rows) => {
       if (!err) {
         let output = 'Available Emotes:```'
         for (let i = 0; i < rows.length; i++) {
@@ -84,11 +79,13 @@ class EmoteCommand extends Commando.Command {
 
     let self = this
     self.DB.all(`
-      SELECT *
-      FROM Files
+      SELECT f.*
+      FROM
+        Files as f,
+        SecondaryCategory as c
       WHERE
-        category_id == 3
-        AND name LIKE '${args.toLowerCase()}%'
+        f.other_id = c.id
+        AND c.name = '${args}'
       ORDER BY RANDOM() LIMIT 1
     `, async (err, rows) => {
       if (err || rows.length === 0) {
@@ -101,14 +98,18 @@ class EmoteCommand extends Commando.Command {
         let file = path.join(__dirname, 'files', 'emote', sound.name + '.mp3')
 
         let voiceChannel = message.member.voiceChannel
-        let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
 
-        if (!inChannel || self.connection === null) {
-          if (self.connection) self.connection.disconnect()
-          self.connection = await voiceChannel.join()
+        if (voiceChannel) {
+          let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
+          if (!inChannel || self.connection === null) {
+            if (self.connection) self.connection.disconnect()
+            self.connection = await voiceChannel.join()
+          }
+
+          self.dispatcher = self.connection.playFile(file)
+        } else {
+          message.channel.send('You need to be in a voice channel for this command!')
         }
-
-        self.dispatcher = self.connection.playFile(file)
       } catch (error) {
         console.log('Error occured!')
         console.log(error)

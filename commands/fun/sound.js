@@ -156,16 +156,19 @@ class SoundCommand extends Commando.Command {
         let file = path.join(__dirname, 'files', sound.category_name, sound.name + '.mp3')
 
         let voiceChannel = message.member.voiceChannel
-        let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
 
-        if (!inChannel || self.connection === null) {
-          if (self.connection) self.connection.disconnect()
-          self.connection = await voiceChannel.join()
+        if (voiceChannel) {
+          let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
+
+          if (!inChannel || self.connection === null) {
+            if (self.connection) self.connection.disconnect()
+            self.connection = await voiceChannel.join()
+          }
+
+          self.dispatcher = self.connection.playFile(file)
+        } else {
+          message.channel.send('You need to be in a voice channel for this command!')
         }
-
-        self.dispatcher = self.connection.playFile(file)
-
-        // console.log(file)
       } catch (error) {
         console.log('Error occured!')
         console.log(error)
