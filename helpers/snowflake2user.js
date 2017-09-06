@@ -1,6 +1,9 @@
 module.exports = (needle, users) => {
   return new Promise((resolve, reject) => {
-    needle = needle.substr(2).replace('>', '')
+    needle = needle
+      .substr(2)
+      .replace('>', '')
+      .replace('!', '')
     users.forEach((user, snowflake) => {
       if (snowflake === needle) {
         resolve(user.user)

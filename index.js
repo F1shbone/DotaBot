@@ -1,13 +1,15 @@
 const path = require('path')
 const fs = require('fs')
-const key = fs.readFileSync('./.key', 'utf-8')
+const KEY = fs.readFileSync('./.KEY', 'utf-8')
 /*
  * Dota Discord Bot
  *
  * Commando Docs: https://discord.js.org/#/docs/commando/master/general/welcome
  */
 const Commando = require('discord.js-commando')
-const bot = new Commando.Client()
+const bot = new Commando.Client({
+  owner: '209050492330967040'
+})
 
 bot.registry
   // Registers your custom command groups
@@ -25,11 +27,12 @@ bot.registry
 
 bot.on('disconnect', function (msg, code) {
   if (code === 0) return console.error(msg)
-  bot.connect()
+  bot.login(KEY)
 })
 
 bot.on('ready', () => {
+  bot.user.setPresence({ game: { name: 'DOTA 2', type: 0 } })
   console.log(`Logged in as ${bot.user.tag}!`)
 })
 
-bot.login(key)
+bot.login(KEY)

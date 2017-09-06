@@ -5,8 +5,9 @@ const path = require('path')
  *
  */
 const Commando = require('discord.js-commando')
-const Helpers = require('../../helpers')
+const Logger = require('../../logger')
 const SQLite3 = require('sqlite3').verbose()
+const SoundManager = require('./soundmanager')
 
 class SoundCommand extends Commando.Command {
   constructor (client) {
@@ -19,8 +20,6 @@ class SoundCommand extends Commando.Command {
     })
 
     this.DB = new SQLite3.Database(path.join(__dirname, 'db.sqlite'))
-    this.connection = null
-    this.dispatcher = null
   }
 
   async run (message, args) {
@@ -87,7 +86,7 @@ class SoundCommand extends Commando.Command {
    */
   async randomSound (message, category) {
     if (message.member === null) {
-      message.channel.send('**ERROR:** \'!sound random\' does not work in direct messages!')
+      Logger.error('\'!sound random\' does not work in direct messages!', message)
       return
     }
 
@@ -101,7 +100,7 @@ class SoundCommand extends Commando.Command {
     let self = this
     this.DB.all(sql, async (err, rows) => {
       if (!err) {
-        await message.channel.send(`Playing sound '${rows[0].name} (${rows[0].id})' from Category '${rows[0].category_name}'`)
+        Logger.info(`Playing sound '${rows[0].name} (${rows[0].id})' from Category '${rows[0].category_name}'`, message)
         await self.playSound(message, rows[0].id)
       } else {
         console.error(err)
@@ -115,11 +114,11 @@ class SoundCommand extends Commando.Command {
    */
   async stopSound (message) {
     if (message.member === null) {
-      message.channel.send('**ERROR:** \'!sound stop\' does not work in direct messages!')
+      Logger.error('\'!sound stop\' does not work in direct messages!', message)
       return
     }
 
-    if (this.dispatcher) this.dispatcher.end()
+    SoundManager.stop()
   }
 
   /**
@@ -129,7 +128,7 @@ class SoundCommand extends Commando.Command {
    */
   async playSound (message, args) {
     if (message.member === null) {
-      message.channel.send('**ERROR:** \'!sound <id>/<name>\' does not work in direct messages!')
+      Logger.error('\'!sound <id>/<name>\' does not work in direct messages!', message)
       return
     }
 
@@ -147,31 +146,23 @@ class SoundCommand extends Commando.Command {
         )
     `, async (err, rows) => {
       if (err || rows.length === 0) {
-        message.channel.send(`Sound "${args || 'undefined'}" not found`)
+        Logger.warning(`Sound '${args || 'undefined'}' not found`, message)
         return
       }
 
       try {
         let sound = rows[0]
-        let file = path.join(__dirname, 'files', sound.category_name, sound.name + '.mp3')
-
         let voiceChannel = message.member.voiceChannel
 
         if (voiceChannel) {
-          let inChannel = await Helpers.inVoiceChannel(voiceChannel.members)
-
-          if (!inChannel || self.connection === null) {
-            if (self.connection) self.connection.disconnect()
-            self.connection = await voiceChannel.join()
-          }
-
-          self.dispatcher = self.connection.playFile(file)
+          await SoundManager.setVoiceChannel(voiceChannel)
+          SoundManager.play(sound.category_name, sound.name)
         } else {
-          message.channel.send('You need to be in a voice channel for this command!')
+          Logger.error('You need to be in a voice channel for this command!', message)
         }
       } catch (error) {
         console.log('Error occured!')
-        console.log(error)
+        console.error(error)
       }
     })
   }

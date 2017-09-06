@@ -4,6 +4,7 @@
  */
 
 const Commando = require('discord.js-commando')
+const Logger = require('../../logger')
 
 class RollCommand extends Commando.Command {
   constructor (client) {
@@ -21,7 +22,7 @@ class RollCommand extends Commando.Command {
     if (!isNaN(args) && args !== '') sides = parseInt(args)
 
     message.delete()
-    message.channel.send(`${message.author} rolled a ${Math.floor(Math.random() * sides) + 1} on a ${sides} sided die!`)
+    Logger.info(`${message.author.username} rolled a ${Math.floor(Math.random() * sides) + 1} on a ${sides} sided die!`, message)
   }
 }
 
