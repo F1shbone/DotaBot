@@ -24,6 +24,12 @@ const SoundManager = {
     this.voiceChannel = voiceChannel
   },
 
+  leave () {
+    if (this.voiceChannel.name !== null) {
+      this.voiceChannel.leave()
+    }
+  },
+
   /**
    * Play Soundfile
    * @param {*} category

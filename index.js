@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const KEY = fs.readFileSync(path.join(__dirname, '.KEY'), 'utf-8')
+const KEY = fs.readFileSync(path.join(__dirname, '.key'), 'utf-8')
 /*
  * Dota Discord Bot
  *

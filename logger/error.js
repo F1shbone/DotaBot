@@ -1,3 +1,3 @@
 module.exports = (text, msg) => {
-  msg.channel.send(`:x:  ERROR \`\`\`${text}\`\`\``)
+  msg.channel.send(`:x:  \`${text}\``)
 }

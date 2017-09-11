@@ -1,3 +1,3 @@
 module.exports = (text, msg) => {
-  msg.channel.send(`:information_source:  INFO \`\`\`${text}\`\`\``)
+  msg.channel.send(`:information_source:  \`${text}\``)
 }
