@@ -1,3 +1,13 @@
 module.exports = (text, msg) => {
-  msg.channel.send(`:x:  \`${text}\``)
+  msg.channel.send({
+    embed: {
+      timestamp: new Date(),
+      fields: [
+        {
+          name: ':x: Error',
+          value: text
+        }
+      ]
+    }
+  })
 }

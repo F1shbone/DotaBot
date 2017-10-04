@@ -19,7 +19,7 @@ class EmoteCommand extends Commando.Command {
       examples: [ 'emote [type]' ]
     })
 
-    this.DB = new SQLite3.Database(path.join(__dirname, 'db.sqlite'))
+    this.DB = new SQLite3.Database(path.join(__dirname, '..', 'db.sqlite'))
   }
 
   async run (message, args) {

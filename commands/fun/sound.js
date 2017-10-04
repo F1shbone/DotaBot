@@ -19,7 +19,7 @@ class SoundCommand extends Commando.Command {
       examples: [ 'sound [name]' ]
     })
 
-    this.DB = new SQLite3.Database(path.join(__dirname, 'db.sqlite'))
+    this.DB = new SQLite3.Database(path.join(__dirname, '..', 'db.sqlite'))
   }
 
   async run (message, args) {
