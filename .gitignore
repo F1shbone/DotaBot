@@ -51,3 +51,6 @@ jspm_packages
 
 .key
 .smb-address
+package-lock.json
+#
+db.xlsx
