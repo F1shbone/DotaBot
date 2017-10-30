@@ -4,6 +4,7 @@ const stream = require('stream')
 /*
  * Music Player
  *
+ * https://github.com/Just-Some-Bots/MusicBot/tree/master/musicbot
  */
 const FileCache = require('class-file-cache')
 const SoundManager = {
@@ -11,6 +12,7 @@ const SoundManager = {
   voiceChannel: {
     name: null
   },
+  voiceConnection: null,
   dispatcher: null,
 
   /**
@@ -19,7 +21,7 @@ const SoundManager = {
    */
   async setVoiceChannel (voiceChannel) {
     if (this.voiceChannel.name !== voiceChannel.name) {
-      await voiceChannel.join()
+      this.voiceConnection = await voiceChannel.join()
     }
     this.voiceChannel = voiceChannel
   },
@@ -39,11 +41,10 @@ const SoundManager = {
     let filepath = path.join(category, filename) + '.mp3'
     let file = this.cache.get(filepath)
     let data = new stream.PassThrough()
-    let connection = this.voiceChannel.connection
 
     data.end(file.buffer)
 
-    this.dispatcher = connection.playStream(data)
+    this.dispatcher = this.voiceConnection.playStream(data)
     this.dispatcher.on('end', () => {
       this.dispatcher = null
     })

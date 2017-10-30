@@ -7,6 +7,7 @@ const path = require('path')
 
 const Commando = require('discord.js-commando')
 const SQLite3 = require('sqlite3').verbose()
+const SQLString = require('sqlstring')
 const Logger = require('../../logger')
 
 class PatchnotesCommand extends Commando.Command {
@@ -39,7 +40,7 @@ class PatchnotesCommand extends Commando.Command {
       this.DB.run('INSERT INTO DotaUsers (discord_id, discord_user, dota_id) VALUES ($discord_id, $discord_user, $dota_id)', {
         $discord_id: user.id,
         $discord_user: user.username,
-        $dota_id: params[1]
+        $dota_id: SQLString.escape(params[1])
       }, async (err) => {
         if (!err) {
           Logger.info(`User ${user.username} added!`, message)
