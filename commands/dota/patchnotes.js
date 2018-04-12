@@ -24,7 +24,7 @@ class PatchnotesCommand extends Commando.Command {
 
     try {
       let server = message.guild
-      if (args.indexOf('reddit') === -1) throw new Error()
+      if (!args.startsWith('https://www.reddit.com/r/DotA2/')) throw new Error()
       if (server.available) {
         let response = await Axios.get(args)
         let $ = Cheerio.load(response.data)

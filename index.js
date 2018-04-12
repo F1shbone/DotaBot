@@ -16,7 +16,8 @@ bot.registry
   .registerGroups([
     ['system', 'System Bot Commands'],
     ['dota', 'OpenDota Commands'],
-    ['fun', 'Random Commands']
+    ['fun', 'Random Commands'],
+    ['test', 'Group of Test Commands']
   ])
 
   // Registers all built-in groups, commands, and argument types
