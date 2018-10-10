@@ -7,8 +7,12 @@ const KEY = fs.readFileSync(path.join(__dirname, '.key'), 'utf-8')
  * Commando Docs: https://discord.js.org/#/docs/commando/master/general/welcome
  */
 const Commando = require('discord.js-commando')
+const ChannelWatcher = require('./lib/channelWatcher')
+
+const guild = '209050930123898880'
+const owner = '209050492330967040'
 const bot = new Commando.Client({
-  owner: '209050492330967040'
+  owner
 })
 
 bot.registry
@@ -32,8 +36,25 @@ bot.on('disconnect', function (msg, code) {
 })
 
 bot.on('ready', () => {
-  bot.user.setPresence({ game: { name: 'DOTA 2', type: 0 } })
+  bot.user.setPresence({
+    game: {
+      name: 'DOTA 2',
+      type: 0
+    }
+  })
+  new ChannelWatcher(bot, guild)
   console.log(`Logged in as ${bot.user.tag}!`)
+})
+
+bot.on('guildMemberVoiceChannelChanged', data => {
+  if (
+    data.guildMember.presence.status === 'idle' &&
+    data.oldVoice.id === '209050930669289472' &&
+    data.newVoice.id === '209281892262871040'
+  ) {
+    // console.log(data)
+    data.guildMember.setVoiceChannel(data.oldVoice.channel)
+  }
 })
 
 bot.login(KEY)
