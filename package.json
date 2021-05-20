@@ -19,7 +19,7 @@
   "author": "tiedemann",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.2",
     "class-file-cache": "^0.8.6",
     "discord.js": "^11.3.2",
